@@ -1,110 +1,36 @@
-import * as web3 from '@solana/web3.js';
-import * as token from '@solana/spl-token';
-import bs58 from 'bs58';
-
-// Token Configuration
-const ITCH_CONFIG = {
-    NAME: "ItchCoin",
-    SYMBOL: "ITCH",
-    DECIMALS: 9,
-    INITIAL_SUPPLY: 1_000_000_000, // 1 billion tokens
-    METADATA: {
-        name: "ItchCoin",
-        symbol: "ITCH",
-        description: "ItchCoin - A community-driven Solana token",
-        image: "", // Can be updated later
-        external_url: "", // Can be updated later
-        attributes: [
-            {
-                trait_type: "Network",
-                value: "Solana"
-            }
-        ]
-    }
-};
-
-async function deployItchCoin() {
-    try {
-        // Connect to Solana network (devnet for testing)
-        const connection = new web3.Connection(
-            web3.clusterApiUrl('devnet'),
-            'confirmed'
-        );
-
-        // Initialize deployer wallet (Replace with your wallet for production)
-        const deployerPrivateKey = "3MZ3WRoNKGFqyFmgLPK8EzMfCwjSXBavi7w3etnDwYCo5tghfoD6WigUHZ5Z3C9ESxEy2ePBhzJZKocW63FCDttr"; // Add your private key here
-        const deployerKeypair = web3.Keypair.fromSecretKey(
-            bs58.decode(deployerPrivateKey)
-        );
-
-        console.log('Deployer public key:', deployerKeypair.publicKey.toString());
-
-        // Check wallet balance
-        const balance = await connection.getBalance(deployerKeypair.publicKey);
-        console.log(`Wallet balance: ${balance / web3.LAMPORTS_PER_SOL} SOL`);
-
-        if (balance < web3.LAMPORTS_PER_SOL) {
-            throw new Error('Insufficient SOL balance for deployment');
+{
+    "name": "ItchCoin",
+    "symbol": "ITCH",
+    "description": "ItchCoin - A community-driven Solana token",
+    "image": "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/logo.png",
+    "external_url": "https://ashishjsharda.github.io/itch-token",
+    "attributes": [
+        {
+            "trait_type": "Network",
+            "value": "Solana"
+        },
+        {
+            "trait_type": "Token Type",
+            "value": "SPL Token"
         }
-
-        // Create mint account using config
-        console.log('Creating mint account...');
-        const mint = await token.createMint(
-            connection,
-            deployerKeypair,
-            deployerKeypair.publicKey,  // mint authority
-            deployerKeypair.publicKey,  // freeze authority
-            ITCH_CONFIG.DECIMALS
-        );
-
-        console.log(`Token Mint: ${mint.toBase58()}`);
-
-        // Create token account
-        console.log('Creating token account...');
-        const tokenAccount = await token.getOrCreateAssociatedTokenAccount(
-            connection,
-            deployerKeypair,
-            mint,
-            deployerKeypair.publicKey
-        );
-
-        console.log(`Token Account: ${tokenAccount.address.toBase58()}`);
-
-        // Mint initial supply
-        console.log(`Minting ${ITCH_CONFIG.INITIAL_SUPPLY} tokens...`);
-        await token.mintTo(
-            connection,
-            deployerKeypair,
-            mint,
-            tokenAccount.address,
-            deployerKeypair,
-            ITCH_CONFIG.INITIAL_SUPPLY * (10 ** ITCH_CONFIG.DECIMALS)
-        );
-
-        console.log('=== ItchCoin Deployment Summary ===');
-        console.log(`Name: ${ITCH_CONFIG.NAME}`);
-        console.log(`Symbol: ${ITCH_CONFIG.SYMBOL}`);
-        console.log(`Decimals: ${ITCH_CONFIG.DECIMALS}`);
-        console.log(`Initial Supply: ${ITCH_CONFIG.INITIAL_SUPPLY}`);
-        console.log(`Mint Address: ${mint.toBase58()}`);
-        console.log(`Token Account: ${tokenAccount.address.toBase58()}`);
-        console.log('================================');
-
-        return { 
-            mint, 
-            tokenAccount: tokenAccount.address, 
-            metadata: ITCH_CONFIG.METADATA 
-        };
-    } catch (error) {
-        console.error('Deployment failed:', error);
-        throw error;
+    ],
+    "properties": {
+        "files": [
+            {
+                "uri": "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/logo.png",
+                "type": "image/png"
+            }
+        ],
+        "category": "cryptocurrency",
+        "tokenomics": {
+            "total_supply": "1000000000",
+            "decimals": 9
+        }
+    },
+    "links": {
+        "website": "https://ashishjsharda.github.io/itch-token",
+        "twitter": "", // Add when available
+        "telegram": "", // Add when available
+        "discord": "" // Add when available
     }
 }
-
-// Execute deployment
-deployItchCoin()
-    .then(() => process.exit(0))
-    .catch((error) => {
-        console.error(error);
-        process.exit(1);
-    });
