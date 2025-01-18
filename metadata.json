@@ -1,0 +1,28 @@
+{
+  "name": "ItchCoin",
+  "symbol": "ITCH",
+  "description": "ItchCoin - A community-driven Solana token",
+  "image": "LOGO_URL_HERE", // We'll update this
+  "external_url": "",
+  "attributes": [
+    {
+      "trait_type": "Network",
+      "value": "Solana"
+    }
+  ],
+  "properties": {
+    "files": [
+      {
+        "uri": "LOGO_URL_HERE", // We'll update this
+        "type": "image/png"
+      }
+    ],
+    "category": "image",
+    "creators": [
+      {
+        "address": "YOUR_WALLET_ADDRESS",
+        "share": 100
+      }
+    ]
+  }
+}
