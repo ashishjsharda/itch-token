@@ -1,8 +1,8 @@
 {
     "name": "ItchCoin",
     "symbol": "ITCH",
-    "description": "ItchCoin - A community-driven Solana token",
-    "image": "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/logo.png",
+    "description": "ItchCoin - A community-driven Solana token focusing on community growth and decentralized governance",
+    "image": "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/docs/logo.png",
     "external_url": "https://ashishjsharda.github.io/itch-token",
     "attributes": [
         {
@@ -12,25 +12,35 @@
         {
             "trait_type": "Token Type",
             "value": "SPL Token"
+        },
+        {
+            "trait_type": "Version",
+            "value": "1.0.0"
         }
     ],
     "properties": {
         "files": [
             {
-                "uri": "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/logo.png",
+                "uri": "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/docs/logo.png",
                 "type": "image/png"
             }
         ],
         "category": "cryptocurrency",
         "tokenomics": {
             "total_supply": "1000000000",
-            "decimals": 9
+            "decimals": 9,
+            "initial_distribution": {
+                "liquidity_pool": "40%",
+                "community_rewards": "30%",
+                "development": "20%",
+                "team": "10%"
+            }
         }
     },
     "links": {
         "website": "https://ashishjsharda.github.io/itch-token",
-        "twitter": "", // Add when available
-        "telegram": "", // Add when available
-        "discord": "" // Add when available
+        "twitter": "https://twitter.com/ItchCoin",
+        "telegram": "https://t.me/ItchCoin",
+        "discord": "https://discord.gg/ItchCoin"
     }
 }
