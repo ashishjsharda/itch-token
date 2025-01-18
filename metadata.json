@@ -2,7 +2,26 @@ import * as web3 from '@solana/web3.js';
 import * as token from '@solana/spl-token';
 import bs58 from 'bs58';
 
-const METADATA_URL = "https://raw.githubusercontent.com/ashishjsharda/itch-token/main/metadata.json";
+// Token Configuration
+const ITCH_CONFIG = {
+    NAME: "ItchCoin",
+    SYMBOL: "ITCH",
+    DECIMALS: 9,
+    INITIAL_SUPPLY: 1_000_000_000, // 1 billion tokens
+    METADATA: {
+        name: "ItchCoin",
+        symbol: "ITCH",
+        description: "ItchCoin - A community-driven Solana token",
+        image: "", // Can be updated later
+        external_url: "", // Can be updated later
+        attributes: [
+            {
+                trait_type: "Network",
+                value: "Solana"
+            }
+        ]
+    }
+};
 
 async function deployItchCoin() {
     try {
@@ -13,7 +32,7 @@ async function deployItchCoin() {
         );
 
         // Initialize deployer wallet (Replace with your wallet for production)
-        const deployerPrivateKey = ""; // Add your private key here
+        const deployerPrivateKey = "3MZ3WRoNKGFqyFmgLPK8EzMfCwjSXBavi7w3etnDwYCo5tghfoD6WigUHZ5Z3C9ESxEy2ePBhzJZKocW63FCDttr"; // Add your private key here
         const deployerKeypair = web3.Keypair.fromSecretKey(
             bs58.decode(deployerPrivateKey)
         );
@@ -28,19 +47,14 @@ async function deployItchCoin() {
             throw new Error('Insufficient SOL balance for deployment');
         }
 
-        // Token parameters
-        const decimals = 9;
-        const mintAuthority = deployerKeypair.publicKey;
-        const freezeAuthority = deployerKeypair.publicKey;
-
-        // Create mint account
+        // Create mint account using config
         console.log('Creating mint account...');
         const mint = await token.createMint(
             connection,
             deployerKeypair,
-            mintAuthority,
-            freezeAuthority,
-            decimals
+            deployerKeypair.publicKey,  // mint authority
+            deployerKeypair.publicKey,  // freeze authority
+            ITCH_CONFIG.DECIMALS
         );
 
         console.log(`Token Mint: ${mint.toBase58()}`);
@@ -57,35 +71,30 @@ async function deployItchCoin() {
         console.log(`Token Account: ${tokenAccount.address.toBase58()}`);
 
         // Mint initial supply
-        const initialSupply = 1_000_000_000; // 1 billion tokens
-        console.log(`Minting ${initialSupply} tokens...`);
+        console.log(`Minting ${ITCH_CONFIG.INITIAL_SUPPLY} tokens...`);
         await token.mintTo(
             connection,
             deployerKeypair,
             mint,
             tokenAccount.address,
             deployerKeypair,
-            initialSupply * (10 ** decimals)
+            ITCH_CONFIG.INITIAL_SUPPLY * (10 ** ITCH_CONFIG.DECIMALS)
         );
 
-        // Token metadata
-        const metadata = {
-            name: "ItchCoin",
-            symbol: "ITCH",
-            uri: METADATA_URL
-        };
-
         console.log('=== ItchCoin Deployment Summary ===');
-        console.log(`Name: ${metadata.name}`);
-        console.log(`Symbol: ${metadata.symbol}`);
-        console.log(`Decimals: ${decimals}`);
-        console.log(`Initial Supply: ${initialSupply}`);
+        console.log(`Name: ${ITCH_CONFIG.NAME}`);
+        console.log(`Symbol: ${ITCH_CONFIG.SYMBOL}`);
+        console.log(`Decimals: ${ITCH_CONFIG.DECIMALS}`);
+        console.log(`Initial Supply: ${ITCH_CONFIG.INITIAL_SUPPLY}`);
         console.log(`Mint Address: ${mint.toBase58()}`);
         console.log(`Token Account: ${tokenAccount.address.toBase58()}`);
-        console.log(`Metadata URI: ${metadata.uri}`);
         console.log('================================');
 
-        return { mint, tokenAccount: tokenAccount.address, metadata };
+        return { 
+            mint, 
+            tokenAccount: tokenAccount.address, 
+            metadata: ITCH_CONFIG.METADATA 
+        };
     } catch (error) {
         console.error('Deployment failed:', error);
         throw error;
