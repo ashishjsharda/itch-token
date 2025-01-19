@@ -27,7 +27,7 @@
         ],
         "category": "cryptocurrency",
         "tokenomics": {
-            "total_supply": "1000000000",
+            "total_supply": "500000000",
             "decimals": 9,
             "initial_distribution": {
                 "liquidity_pool": "40%",
@@ -39,6 +39,7 @@
     },
     "links": {
         "website": "https://ashishjsharda.github.io/itch-token",
+        "twitter": "https://twitter.com/ItchCoin",
         "telegram": "https://t.me/+au6celPuy7w3OGEx",
         "discord": "https://discord.gg/8nwF7eXU"
     }
